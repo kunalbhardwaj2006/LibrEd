@@ -1,3 +1,7 @@
+![License](https://img.shields.io/badge/license-Apache%202-blue)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
+![React](https://img.shields.io/badge/frontend-react-blue)
+![Python](https://img.shields.io/badge/backend-python-yellow)
 > [!IMPORTANT]
 > Readme is needed to be updated. To get an overview of the project and ideas to work on go through [arch.md](./arch.md).
 
@@ -35,24 +39,25 @@ The system is split into two autonomous components that communicate via shared f
 <!-- *   [Git LFS](https://git-lfs.github.com/). -->
 
 ### Quick Start
-1.  **Clone the repository**:
-    ```bash
-   git clone https://github.com/AOSSIE-Org/LibrEd.git
+1.  Clone the repository:
+
+```bash
+git clone https://github.com/AOSSIE-Org/LibrEd.git
 cd LibrEd
-    ```
 
 2.  **Launch the System**:
     ```bash
     docker compose up --build
     ```
-    *   **Frontend**: Accessible at `http://localhost:3000`.
-    *   **Generator**: Autonomously populates content in the background.
+    *  Frontend: Accessible at http://localhost:3000
+
+Generator: Autonomously populates content in the background.
     *   **Idempotency**: Existing data is skipped; re-launching only processes new or missing streams.
 
-3.  **Monitor Pipeline**:
-    ```bash
-    asset-generator
-    ```
+3.  **Monitor the pipeline logs:
+
+```bash
+docker compose logs -f asset-generator
 
 ### Configuration
 Central configuration is managed in `generator/src/config.py`. You can customize:
@@ -76,7 +81,8 @@ AI is a powerful accelerator, but it's not perfect. We rely on the community to 
 ### Testing
 The project includes a comprehensive test suite that runs in Docker.
 
-**1. Generator Tests (Backend)**
+### 1. Generator Tests (Backend)
+
 ```bash
 docker compose run --rm asset-generator pytest generator/tests
 ```
@@ -101,6 +107,19 @@ docker run --rm --network gatebuster_app_network `
 mcr.microsoft.com/playwright:v1.58.0-jammy `
 sh -c "npm install && npx playwright test"
 ```
+## Project Structure
+
+LibrEd/
+│
+├── generator/        # Python asset generation pipeline
+│   ├── src/
+│   └── tests/
+│
+├── frontend/         # React application
+│
+├── docker-compose.yml
+├── README.md
+└── arch.md
 *Note: Ensure the frontend service is running (`docker compose up`) before starting Playwright tests.*
 
 ## License
