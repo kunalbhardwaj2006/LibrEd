@@ -1,3 +1,10 @@
+"""
+pdf_utils.py
+
+Utility functions for handling PDF documents in the LibrEd asset generator.
+This module extracts pages, images, and metadata from GATE exam PDFs before
+they are processed by the asset generation pipeline.
+"""
 import fitz  # PyMuPDF
 import os
 import logging
