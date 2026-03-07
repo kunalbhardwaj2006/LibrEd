@@ -23,38 +23,38 @@ def optimize_image(
     quality: int = 85,
     lossless: bool = False,
 ) -> None:
-    """
-    Optimize and save an image with specified format and quality settings.
-    
-    Args:
-        image: PIL Image object to optimize
-        output_path: Path where the optimized image will be saved
-        format: Output format - 'png' or 'webp' (default: 'webp')
-        quality: Quality level 1-100 for lossy compression (default: 85)
-                 Higher values = better quality but larger files
-        lossless: Use lossless compression (default: False)
-                  For WebP: True = lossless, False = lossy
-                  For PNG: This parameter is ignored (PNG is always lossless)
-    
-    Returns:
-        None
-    
-    Example:
-        >>> img = Image.open("source.png")
-        >>> optimize_image(img, "output.webp", format="webp", quality=85)
-        >>> optimize_image(img, "output.png", format="png")
-    """
+   """
+Optimize and save an image with specified format and quality settings.
+
+Args:
+    image: PIL Image object to optimize
+    output_path: Path where the optimized image will be saved
+    format: Output format - 'png' or 'webp'
+    quality: Quality level for lossy compression (1–100)
+    lossless: Whether to use lossless compression
+
+Returns:
+    None
+"""
+
+    if not 1 <= quality <= 100:
+        raise ValueError("Quality must be between 1 and 100")
+
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
+    logger.debug(
+    f"Optimizing image -> format={format}, quality={quality}, lossless={lossless}"
+)
+
     if format == "webp":
         _save_as_webp(image, output_path, quality, lossless)
     elif format == "png":
         _save_as_png(image, output_path)
     else:
         raise ValueError(f"Unsupported format: {format}. Use 'png' or 'webp'.")
-    
-    logger.debug(f"Saved optimized {format.upper()} to {output_path}")
+
+    logger.debug(f"Saved optimized {format.upper()} image to {output_path}")
 
 
 def _save_as_webp(
@@ -64,37 +64,37 @@ def _save_as_webp(
     lossless: bool
 ) -> None:
     """Save image as WebP with specified quality settings."""
+
+    logger.debug(f"Saving image as WEBP: {output_path}")
+
     save_kwargs = {
         "format": "WebP",
         "lossless": lossless,
     }
-    
+
     if not lossless:
         save_kwargs["quality"] = quality
-        save_kwargs["method"] = 6  # 0-6, higher = slower but better compression
-    
+        save_kwargs["method"] = 6
+
     image.save(output_path, **save_kwargs)
 
 
 def _save_as_png(image: Image.Image, output_path: Path) -> None:
     """Save image as optimized PNG."""
+
+    logger.debug(f"Saving image as PNG: {output_path}")
+
     image.save(
         output_path,
         format="PNG",
         optimize=True,
-        compress_level=9  # Maximum compression (0-9)
+        compress_level=9
     )
 
 
 def get_file_extension(format: ImageFormat) -> str:
     """
     Get the file extension for a given image format.
-    
-    Args:
-        format: Image format ('png' or 'webp')
-    
-    Returns:
-        File extension with dot (e.g., '.webp')
     """
     return f".{format}"
 
@@ -108,36 +108,32 @@ def convert_existing_image(
 ) -> str:
     """
     Convert an existing image file to optimized format.
-    
-    Args:
-        input_path: Path to source image
-        output_path: Path for output (if None, replaces extension of input_path)
-        format: Target format - 'png' or 'webp'
-        quality: Quality level for lossy compression (1-100)
-        lossless: Use lossless compression
-    
-    Returns:
-        Path to the converted image
-    
-    Example:
-        >>> convert_existing_image("image.png", format="webp", quality=85)
-        'image.webp'
     """
+
     input_path = Path(input_path)
-    
+
+    if not input_path.exists():
+        logger.error(f"Input image file not found: {input_path}")
+        raise FileNotFoundError(f"Input image file not found: {input_path}")
+
     if output_path is None:
         output_path = input_path.with_suffix(get_file_extension(format))
     else:
         output_path = Path(output_path)
-    
+
+    logger.debug(f"Converting image {input_path} -> {output_path}")
+
     with Image.open(input_path) as img:
+
         # Convert RGBA to RGB if saving as format that doesn't support transparency
         if img.mode == "RGBA" and format not in ["png", "webp"]:
-            # Create white background
+            logger.debug("Converting RGBA image to RGB")
             background = Image.new("RGB", img.size, (255, 255, 255))
-            background.paste(img, mask=img.split()[3])  # Use alpha channel as mask
+            background.paste(img, mask=img.split()[3])
             img = background
-        
+
         optimize_image(img, str(output_path), format, quality, lossless)
-    
+
+    logger.debug(f"Image conversion complete: {output_path}")
+
     return str(output_path)
