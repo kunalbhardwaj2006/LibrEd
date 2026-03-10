@@ -7,3 +7,4 @@ beautifulsoup4==4.12.2
 requests==2.31.0
 google-generativeai==0.3.2
 pytest==7.4.4
+tqdm
