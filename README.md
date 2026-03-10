@@ -27,6 +27,19 @@ The system is split into two autonomous components that communicate via shared f
 
 *For a detailed deep-dive into the system design, components, and data flow, please refer to [`arch.md`](./arch.md).*
 
+## CLI Dataset Generator
+
+You can generate datasets from PDFs using the command line interface.
+
+Example:
+
+python generator/cli.py --pdf input.pdf --output dataset/
+
+Arguments:
+
+--pdf     Path to the input PDF file
+--output  Directory where generated images will be saved
+
 ## Getting Started
 
 ### Prerequisites
