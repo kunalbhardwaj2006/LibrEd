@@ -1,5 +1,16 @@
 """
-Ollama model management utilities.
+model_manager.py
+
+Utilities for managing Ollama language models used by the LibrEd
+asset generation pipeline.
+
+This module provides helper functions to interact with the local
+Ollama server, verify model availability, and ensure the required
+LLM is ready before generation tasks start.
+
+It helps the generator maintain a reliable connection with the
+local LLM environment used for generating explanations and theory
+content from GATE exam materials.
 """
 import requests
 import logging
