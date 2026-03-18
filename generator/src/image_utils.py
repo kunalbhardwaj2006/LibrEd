@@ -1,9 +1,14 @@
 """
-Image optimization utilities for asset generation.
+image_utils.py
 
-This module provides functions to optimize images for web delivery,
-supporting both PNG optimization and WebP conversion with configurable
-quality settings.
+Utility functions for image processing in the LibrEd asset generator.
+
+This module handles image extraction, formatting, compression,
+optimization, and WebP conversion for question and explanation
+images extracted from GATE exam PDFs.
+
+These utilities help ensure images are optimized for web delivery
+while maintaining good visual quality.
 """
 
 import logging
