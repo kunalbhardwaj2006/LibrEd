@@ -1,3 +1,12 @@
+"""
+db_utils.py
+
+Database utility functions used by the LibrEd asset generator.
+
+This module manages interactions with the DuckDB database used
+for storing metadata, extracted questions, and processing state
+during the asset generation pipeline.
+"""
 import duckdb
 import os
 import logging
