@@ -62,6 +62,8 @@ def _save_as_webp(
     output_path: Path,
     quality: int,
     lossless: bool
+):
+    logger.debug(f"Saving image as WEBP: {output_path} | quality={quality} | lossless={lossless}")
 ) -> None:
     """Save image as WebP with specified quality settings."""
     save_kwargs = {
