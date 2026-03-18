@@ -31,10 +31,16 @@ def process_syllabus(stream_code, filepath, con=None):
     but modern flow uses LLM.
     """
     logger.info(f"Processing Syllabus: {filepath}")
+
+try:
     doc = fitz.open(filepath)
-    text = ""
-    for page in doc:
-        text += page.get_text()
+except Exception as e:
+    logger.error(f"Failed to open PDF file: {filepath} - {e}")
+    return ""
+
+text = ""
+for page in doc:
+    text += page.get_text()
     
     # Heuristic parsing logic preserved from OOP version
     lines = text.split('\n')
