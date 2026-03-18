@@ -32,6 +32,19 @@ Live: https://dontcompete.vercel.app
 
 ---
 
+## CLI Dataset Generator
+
+You can generate datasets from PDFs using the command line interface.
+
+Example:
+
+python generator/cli.py --pdf input.pdf --output dataset/
+
+Arguments:
+
+--pdf     Path to the input PDF file
+--output  Directory where generated images will be saved
+
 ## Getting Started
 
 ### Prerequisites
