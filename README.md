@@ -72,6 +72,51 @@ The system is split into two autonomous components that communicate via shared f
 1.  **Asset Generator (`/generator`)**: A functional Python pipeline using DuckDB, PyMuPDF, `tenacity` (retries), and Ollama.
 2.  **Frontend (`/frontend`)**: A high-performance React application (Vite, TanStack Router) that **dynamically discovers** generated static assets via filesystem structure (Zero-Config discovery).
 
+### 🚀 Proposed Enhanced Async Architecture (GSoC Contribution)
+
+To address current performance bottlenecks and improve scalability, this proposal introduces an async, parallel, and cache-optimized pipeline for LibrEd.
+
+Key improvements:
+- Async batch processing (no sequential blocking)
+- Parallel LLM workers for faster execution
+- Cache layer to avoid repeated computation
+- Modular and scalable pipeline design
+
+flowchart TD
+
+A[PDF Sources / Scraper] --> B[Preprocessing Engine]
+B --> C[Question Extraction + Image Processing]
+C --> D[DuckDB Storage]
+
+D --> E[Prompt Generator]
+
+E --> F[Async Task Queue]
+
+F --> G1[LLM Worker 1]
+F --> G2[LLM Worker 2]
+F --> G3[LLM Worker N]
+
+G1 --> H[Response Processor]
+G2 --> H
+G3 --> H
+
+H --> I[Cache Layer]
+I --> J[Database Update]
+
+J --> K1[Classification Output]
+J --> K2[Theory Generation]
+
+K2 --> L[Markdown Generator]
+
+L --> M[Manifest Generator]
+
+M --> N[Frontend Assets]
+
+N --> O[React Frontend]
+
+O --> P[User Interaction + Testing Engine]
+
+
 ### Data Pipeline: Detailed Components & Flows
 
 The generator (`generator/src/main.py`) runs a sequential, atomic pipeline.
